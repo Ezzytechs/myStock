@@ -51,12 +51,13 @@ module.exports = gql`
   }
 
   type Query {
-    stocks(page: Int = 1, limit: Int = 10): PaginatedStocks
-    stockById(id: ID!): Stock
+    allStocks(page: Int = 1, limit: Int = 10): PaginatedStocks
+    stockDetails(id: ID!): Stock
     userStocks(id: ID!): [Stock]
-    userStocksByCategory(id: ID!, category: String!): [Stock]
-    userStocksByUnit(id: ID!, unit: String!): [Stock]
-    userStocksByStatus(id: ID!, status: String!): [Stock]
+    stocksByCategory(id: ID!, category: String!): [Stock]
+    stocksByUnit(id: ID!, unit: String!): [Stock]
+    stocksByStatus(id: ID!, status: String!): [Stock]
+    stocksByYear(id: ID!, year: Int!): [Stock]
     stockStats: StockStatistics
   }
 

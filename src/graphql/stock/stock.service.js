@@ -1,8 +1,9 @@
 const Stock = require("./stock.model");
 const { paginate } = require("../../utils/paginate");
-
+//Add new stock
 exports.addStock = async (stock) => await Stock.create(stock);
 
+//Get all stocks
 exports.getAllStocks = async (page, limit) => {
   return await paginate(Stock, {
     page,
@@ -10,39 +11,47 @@ exports.getAllStocks = async (page, limit) => {
   });
 };
 
+//Get stock by id
 exports.getStockById = async (id) => await Stock.findById(id);
 
+//Update stock
 exports.updateStock = async (id, updates, userId) => {
   const filter = userId ? { id, owner: userId } : { id };
   return Stock.findOneAndUpdate({ ...filter }, { ...updates }, { new: true });
 };
 
+//Delete stock
 exports.deleteStock = async (id, userId) => {
   const filter = userId ? { id, owner: userId } : { id };
   await Stock.findOneAndDelete(filter);
   return "Stock deleted";
 };
 
-exports.getStocks = async (id) => {
+//Get stocks by owner
+exports.getUserStocks = async (id) => {
   const filter = id ? { owner: id } : {};
-  return Stock.find(filter);
+  return paginate(Stock, { filter, page, limit });
 };
 
-exports.getStocksByStatus = async (id, status) => {
+//Get stocks by status
+exports.getStocksByStatus = async (id, status, page, limit) => {
   const filter = id ? { owner: id, status } : { status };
-  return Stock.find(filter);
+  return paginate(Stock, { filter, page, limit });
 };
 
-exports.getStocksByCategory = async (id, category) => {
+//Get stocks by category
+exports.getStocksByCategory = async (id, category, page, limit) => {
   const filter = id ? { owner: id, category } : { category };
-  return Stock.find(filter);
+  return paginate(Stock, { filter, page, limit });
 };
 
-exports.getStocksByUnit = async (id, unit) => {
+//Get stocks by unit
+exports.getStocksByUnit = async (id, unit, page, limit) => {
   const filter = id ? { owner: id, unit } : { unit };
-  return Stock.find(filter);
+  return paginate(Stock, { filter, page, limit });
 };
 
+//Get stock stats
 exports.getStockStats = async (id) => {
   const filter = id ? { owner: id } : {};
   const [all, open, closed] = await Promise.all([
@@ -53,7 +62,8 @@ exports.getStockStats = async (id) => {
   return { all, open, closed };
 };
 
-exports.getStockByYear = async (id, year) => {
+//Get stocks by year
+exports.getStockByYear = async (id, year, page, limit) => {
   const filter = id
     ? {
         owner: id,
@@ -68,5 +78,5 @@ exports.getStockByYear = async (id, year) => {
           $lt: new Date(year + 1, 0, 1),
         },
       };
-  return Stock.find(filter);
+  return paginate(Stock, { filter, page: 1, limit: 10 });
 };

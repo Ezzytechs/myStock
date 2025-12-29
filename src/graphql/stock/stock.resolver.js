@@ -1,10 +1,10 @@
 const {
   getAllStocks,
-  getAllStocks,
   getStockById,
   deleteStock,
   updateStock,
   addStock,
+  getUserStocks,
   getStocksByCategory,
   getStocksByUnit,
   getStocksByStatus,
