@@ -45,10 +45,28 @@ exports.getStocksByUnit = async (id, unit) => {
 
 exports.getStockStats = async (id) => {
   const filter = id ? { owner: id } : {};
-  const [all, admins, users] = await Promise.all([
+  const [all, open, closed] = await Promise.all([
     Stock.countDocuments(),
     Stock.countDocuments({ status: "open", ...filter }),
     Stock.countDocuments({ status: "closed", ...filter }),
   ]);
-  return { all, users, admins };
+  return { all, open, closed };
+};
+
+exports.getStockByYear = async (id, year) => {
+  const filter = id
+    ? {
+        owner: id,
+        createdAt: {
+          $gte: new Date(year, 0, 1),
+          $lt: new Date(year + 1, 0, 1),
+        },
+      }
+    : {
+        createdAt: {
+          $gte: new Date(year, 0, 1),
+          $lt: new Date(year + 1, 0, 1),
+        },
+      };
+  return Stock.find(filter);
 };
