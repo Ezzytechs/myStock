@@ -52,7 +52,7 @@ module.exports = {
       return "Logged out";
     },
 
-    login: async (_, args, { res }) => {
+    login: async (_parent, args, { res }) => {
       const { email, password } = args;
       const accessToken = await loginUser(email, password, res);
       return { accessToken };
