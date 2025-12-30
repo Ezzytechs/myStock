@@ -1,17 +1,18 @@
 const { ForbiddenError } = require("apollo-server-express");
 const jwt = require("jsonwebtoken");
-const ACCESS_SECRET = "access_secret";
-const REFRESH_SECRET = "refresh_secret";
+require("dotenv").config();
+const ACCESS_SECRET = process.env.ACCESS_SECRET;
+const REFRESH_SECRET = process.env.REFRESH_SECRET;
 
 exports.generateTokens = (user, res) => {
   const accessToken = jwt.sign(
-    { id: user.id, role: user.role },
+    { sub: user.id, role: user.role },
     ACCESS_SECRET,
-    { expiresIn: "15m" }
+    { expiresIn: "1d" }
   );
 
   const refreshToken = jwt.sign(
-    { id: user.id, role: user.role, username: user.username },
+    { sub: user.id, role: user.role, username: user.username },
     REFRESH_SECRET,
     { expiresIn: "7d" }
   );
@@ -33,9 +34,9 @@ exports.verifyAccess = (token) => {
 
 exports.verifyRefresh = async (user, token, res) => {
   try {
-    const verify = await jwt.verify(token, REFRESH_SECRET);
+    const verify = jwt.verify(token, REFRESH_SECRET);
     if (!verify) throw new Error("Invalid refresh token");
-    const { accessToken } = await this.generateTokens(user, res);
+    const { accessToken } = this.generateTokens(user, res);
     return accessToken;
   } catch {
     return null;

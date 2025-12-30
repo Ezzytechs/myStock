@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema(
     email: { type: String, unique: true },
     password: String,
     role: { type: String, enum: ["user", "admin"], default: "user" },
+    otp: { otpCode: Number, otpExpiry: Date },
   },
   {
     timestamps: true,

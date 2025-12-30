@@ -1,20 +1,21 @@
+const { requireRole } = require("../../../utils/auth");
 const {
   getAllUsers,
   getUserById,
   updateUser,
   deleteUser,
   getUserStats,
+  toggleRole,
 } = require("./profile.service");
 
 module.exports = {
   Query: {
     me: (_, __, { user }) => {
-      if (!user) throw new Error("Unauthorized");
-      return getUserById(user.id);
+      return getUserById(user.sub);
     },
 
     users: async (_, args, { user }) => {
-      requireRole(user.role, "admin");
+      requireRole(user.role, ["admin"]);
       const { page, limit } = args;
       const users = await getAllUsers(page, limit);
       return users;
@@ -24,17 +25,20 @@ module.exports = {
       return userStats;
     },
     getUser: (_, { id }, { user }) => {
-      requireRole(user.role, "admin");
+      requireRole(user.role, ["admin"]);
       return getUserById(id);
     },
   },
   Mutation: {
     updateUser: (_, { input }, { user }) => {
-      return updateUser(user.id, input);
+      return updateUser(user.sub, input);
     },
-
+    toggleRole: (_, { id }, { user }) => {
+      requireRole(user.role, ["admin"]);
+      return toggleRole(id);
+    },
     deleteUser: (_, { id }, { user }) => {
-      requireRole(user.role, "admin");
+      requireRole(user.role, ["admin"]);
       return deleteUser(id);
     },
   },

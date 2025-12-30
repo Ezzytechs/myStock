@@ -33,7 +33,7 @@ exports.getAllUsers = async (page, limit) => {
     return await paginate(User, {
       page,
       limit,
-      select: "-password",
+      select: "-password -otp",
     });
   } catch (error) {
     throw AppError.internal(error.message);
@@ -42,7 +42,7 @@ exports.getAllUsers = async (page, limit) => {
 
 exports.getUserById = async (id) => {
   try {
-    User.findById(id);
+    return User.findById(id).select("-password -otp");
   } catch (error) {
     throw AppError.internal(error.message);
   }
@@ -50,7 +50,9 @@ exports.getUserById = async (id) => {
 
 exports.updateUser = async (id, updates) => {
   try {
-    return User.findByIdAndUpdate(id, { ...updates }, { new: true });
+    return User.findByIdAndUpdate(id, { ...updates }, { new: true }).select(
+      "-password -otp"
+    );
   } catch (error) {
     throw AppError.internal(error.message);
   }
@@ -60,6 +62,18 @@ exports.deleteUser = async (id) => {
   try {
     await User.findByIdAndDelete(id);
     return "User deleted";
+  } catch (error) {
+    throw AppError.internal(error.message);
+  }
+};
+
+exports.toggleRole = async (id) => {
+  try {
+    const user = await User.findById(id);
+    if (!user) throw AppError.notFound("User not found");
+    user.role = user.role === "admin" ? "user" : "admin";
+    await user.save();
+    return user;
   } catch (error) {
     throw AppError.internal(error.message);
   }

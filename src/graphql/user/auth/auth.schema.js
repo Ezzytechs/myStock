@@ -10,5 +10,8 @@ module.exports = gql`
     login(email: String!, password: String!): Token
     logout: String
     refreshToken: String
+    generateOtp(email: String!): String
+    resetPassword(email: String!, otp: String!, password: String!): String
+    changePassword(email: String!, password: String!): String
   }
 `;

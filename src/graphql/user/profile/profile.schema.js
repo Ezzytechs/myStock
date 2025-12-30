@@ -48,11 +48,8 @@ module.exports = gql`
   }
 
   type Mutation {
-    register(input: RegisterInput!): Token
-    login(email: String!, password: String!): Token
     updateUser(input: UpdateInput!): User
     deleteUser(id: ID!): String
-    logout: String
-    refreshToken: String
+    toggleRole(id: ID!): User
   }
 `;

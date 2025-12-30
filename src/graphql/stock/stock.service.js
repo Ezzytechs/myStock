@@ -1,8 +1,37 @@
 const Stock = require("./stock.model");
-const { paginate } = require("../../utils/paginate");
-//Add new stock
-exports.addStock = async (stock) => await Stock.create(stock);
+const Accounting = require("../accounting/accounting.model");
+const { paginate } = require("@utils/paginate");
+const {
+  calculateTotalExpenses,
+  calculateTotalAmount,
+} = require("@utils/accounting");
 
+//Add new stock **least sale
+exports.addStock = async (stock) => {
+  //calculate initial total expenses
+  const totalExpenses = calculateTotalExpenses(stock.expenses);
+  //calculate total amount
+  const totalAmount = calculateTotalAmount(
+    stock.totalUnit,
+    stock.amountPerUnit
+  );
+  //set total expenses and total amount
+  stock.totalExpenses = totalExpenses;
+  stock.totalAmount = totalAmount;
+  //create stock and accounting
+  const newStock = await Stock.create(stock);
+  const newAccounting = await Accounting.create({
+    stock: newStock._id,
+    amountBeforeExpense: newStock.totalAmount,
+    amountAfterExpense: newStock.totalAmount + newStock.totalExpenses,
+    owner: stock.owner,
+  });
+
+  newStock.accounting = newAccounting._id;
+  await newStock.save();
+
+  return newStock;
+};
 //Get all stocks
 exports.getAllStocks = async (page, limit) => {
   return await paginate(Stock, {
@@ -17,6 +46,13 @@ exports.getStockById = async (id) => await Stock.findById(id);
 //Update stock
 exports.updateStock = async (id, updates, userId) => {
   const filter = userId ? { id, owner: userId } : { id };
+  const totalExpenses = calculateTotalExpenses(updates.expenses);
+  const totalAmount = calculateTotalAmount(
+    updates.totalUnit,
+    updates.amountPerUnit
+  );
+  updates.totalExpenses = totalExpenses;
+  updates.totalAmount = totalAmount;
   return Stock.findOneAndUpdate({ ...filter }, { ...updates }, { new: true });
 };
 

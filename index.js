@@ -1,11 +1,14 @@
 const express = require("express");
+require("module-alias/register");
 const dotenv = require("dotenv");
 const { ApolloServer } = require("apollo-server-express");
 const cookieParser = require("cookie-parser");
 const connectDB = require("./src/config/db");
-const { verifyRefresh } = require("./src/utils/auth");
+const { verifyAccess } = require("./src/utils/auth");
 const { typeDefs, resolvers } = require("./src/graphql");
 const mongoose = require("mongoose");
+const morgan = require("morgan");
+const AppError = require("./src/utils/appErrors");
 
 dotenv.config();
 
@@ -14,18 +17,33 @@ const startServer = async () => {
 
   const app = express();
   app.use(cookieParser());
+  app.use(morgan(":method :url :response-time ms"));
 
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
     context: ({ req, res }) => {
-      const token = req.cookies.token;
+      const authHeader = req.headers.authorization;
+      const token = authHeader?.startsWith("Bearer ")
+        ? authHeader.split(" ")[1]
+        : null;
+
       if (!token) return { req, res, user: null };
-      const user = verifyRefresh(token);
+
+      const user = verifyAccess(token);
+      if (!user)
+        throw AppError.unauthorized("Unauthorized. Invalid or expired token");
       return { req, res, user };
     },
+
     formatError: (err) => {
-      console.error(err);
+      console.error("error from formatter", { err: err.message });
+      if (
+        err.message.includes("(reading 'sub')") ||
+        err.message.includes("(reading 'role')")
+      ) {
+        throw AppError.unauthorized("Unauthorized. Must sign in!");
+      }
       return err;
     },
   });
