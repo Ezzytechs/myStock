@@ -1,11 +1,14 @@
-exports.calculateTotalAmount = (totalUnit, amountPerUnit) => {
-  return totalUnit * amountPerUnit;
-};
+exports.calculateTotalAmount = (totalUnit, amountPerUnit) =>
+  Number(totalUnit) * Number(amountPerUnit);
 
-exports.calculateNetChange = (amountBeforeExpense, amountAfterExpense) => {
-  return amountAfterExpense - amountBeforeExpense;
-};
+exports.calculateNetChange = (amountSold, amountAfterExpense) =>
+  Number(amountSold) - Number(amountAfterExpense);
 
-exports.calculateTotalExpenses = (expenses) => {
-  return expenses.reduce((total, expense) => total + expense.price, 0);
-};
+exports.calculateTotalExpenses = (expenses) =>
+  expenses.reduce((total, expense) => total + Number(expense.price), 0);
+
+exports.calculateLeastSales = (totalUnit, amountAfterExpense) =>
+  Number(amountAfterExpense) / Number(totalUnit);
+
+exports.calculateAmountAfterExpense = (totalAmount, totalExpenses) =>
+  Number(totalAmount) + Number(totalExpenses);

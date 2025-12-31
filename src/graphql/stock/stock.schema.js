@@ -1,6 +1,19 @@
 const { gql } = require("apollo-server-express");
 
 module.exports = gql`
+  type Accounting {
+    id: ID!
+    stock: ID!
+    amountBeforeExpense: Float!
+    amountAfterExpense: Float!
+    leastSale: Float!
+    netChange: Float!
+    remark: String!
+    owner: ID!
+    createdAt: String!
+    updatedAt: String!
+  }
+
   type Stock {
     id: ID!
     name: String!
@@ -10,6 +23,7 @@ module.exports = gql`
     price: Float!
     owner: ID!
     status: String!
+    accounting: Accounting
   }
 
   type PaginatedMetaData {

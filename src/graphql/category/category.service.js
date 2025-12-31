@@ -1,6 +1,7 @@
 const Category = require("./category.model");
 const { paginate } = require("@utils/paginate");
 const { AppError } = require("@utils/appErrors");
+
 //Add new category
 exports.addCategory = async (category) => {
   try {
