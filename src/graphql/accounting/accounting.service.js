@@ -160,6 +160,10 @@ exports.getAccountingSummaryByRemark = async (filter = {}) => {
 
 exports.getAllTimeProfit = async (filter) => {
   try {
+    if (filter.owner) {
+      filter.owner = new mongoose.Types.ObjectId(filter.owner);
+    }
+
     const result = await Accounting.aggregate([
       {
         $match: filter,
@@ -185,6 +189,9 @@ exports.getTotalNetChangeByYearAndRemark = async (filter) => {
 
     if (!year || !remark) {
       throw AppError.badRequest("year and remark are required");
+    }
+    if (filter.owner) {
+      filter.owner = new mongoose.Types.ObjectId(filter.owner);
     }
 
     const startDate = new Date(`${year}-01-01T00:00:00.000Z`);
