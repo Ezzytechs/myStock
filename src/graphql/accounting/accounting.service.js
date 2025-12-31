@@ -117,6 +117,7 @@ exports.getAccountingStatsByFilter = async (filter) => {
   }
 };
 
+//account summary by remark, stock, owner
 exports.getAccountingSummaryByRemark = async (filter = {}) => {
   try {
     // Ensure ObjectId fields are properly cast

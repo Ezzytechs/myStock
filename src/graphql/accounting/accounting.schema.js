@@ -6,8 +6,19 @@ module.exports = gql`
     email: String
     role: String
   }
+
   type Category {
     name: String
+  }
+
+  type Stock {
+    id: ID!
+    category: Category
+    unit: String!
+    quantity: Int!
+    price: Float!
+    owner: Owner
+    status: String!
   }
 
   type Accounting {
@@ -21,15 +32,6 @@ module.exports = gql`
     owner: Owner
     createdAt: String!
     updatedAt: String!
-  }
-  type Stock {
-    id: ID!
-    category: Category
-    unit: String!
-    quantity: Int!
-    price: Float!
-    owner: Owner
-    status: String!
   }
 
   type StockStatistics {
@@ -50,15 +52,36 @@ module.exports = gql`
     meta: PaginatedMetaData
   }
 
-  type AccountingStatisticsByFilter {
-    total: Int
-  }
   type AccountingStatistics {
     total: Int
     profit: Int
     loss: Int
     neutral: Int
     initial: Int
+  }
+
+  type AccountingStatisticsByFilter {
+    total: Int
+  }
+
+  type AccountingSummaryByRemark {
+    profit: Float
+    loss: Float
+    neutral: Float
+  }
+
+  type AllTimeProfit {
+    allTimeProfit: Float
+  }
+
+  """
+  Reusable type for all yearly + net change breakdowns
+  """
+  type YearlyNetChange {
+    year: Int
+    profit: Float
+    loss: Float
+    neutral: Float
   }
 
   input AccountingFilterInput {
@@ -88,29 +111,52 @@ module.exports = gql`
     remark: String
     owner: ID
   }
-  type AccountingSummaryByRemark {
-    profit: Float
-    loss: Float
-    neutral: Float
-  }
-  type AllTimeProfit {
-    allTimeProfit: Float
-  }
+
   type Query {
     allAccountings(
       page: Int = 1
       limit: Int = 10
       filter: AccountingFilterInput
     ): PaginatedAccountings
+
     accountingDetails(id: ID!): Accounting
     accountingStats: AccountingStatistics
+
     accountingStatsByFilter(
       filter: AccountingFilterInput
     ): AccountingStatisticsByFilter
+
     accountingSummaryByRemark(
       filter: AccountingFilterInput
     ): AccountingSummaryByRemark
+
     allTimeProfit(filter: AccountingFilterInput): AllTimeProfit
+
+    yearlyAccountingBreakdown(filter: AccountingFilterInput): YearlyNetChange
+
+    totalNetChangeByYearAndRemark(
+      filter: AccountingFilterInput
+    ): YearlyNetChange
+
+    totalNetChangeByYearAndStock(filter: AccountingFilterInput): YearlyNetChange
+
+    totalNetChangeByYearAndOwner(filter: AccountingFilterInput): YearlyNetChange
+
+    totalNetChangeByYearAndRemarkAndStock(
+      filter: AccountingFilterInput
+    ): YearlyNetChange
+
+    totalNetChangeByYearAndRemarkAndOwner(
+      filter: AccountingFilterInput
+    ): YearlyNetChange
+
+    totalNetChangeByYearAndStockAndOwner(
+      filter: AccountingFilterInput
+    ): YearlyNetChange
+
+    totalNetChangeByYearAndRemarkAndStockAndOwner(
+      filter: AccountingFilterInput
+    ): YearlyNetChange
   }
 
   type Mutation {
