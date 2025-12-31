@@ -12,7 +12,8 @@ const categoryResolvers = require("./category/category.resolver");
 const categoryTypeDefs = require("./category/category.schema");
 const unitResolvers = require("./unit/unit.resolver");
 const unitTypeDefs = require("./unit/unit.schema");
-
+const accountingResolvers = require("./accounting/accounting.resolver");
+const accountingTypeDefs = require("./accounting/accounting.schema");
 // merge typeDefs and resolvers
 module.exports = {
   typeDefs: mergeTypeDefs([
@@ -21,6 +22,7 @@ module.exports = {
     authTypeDefs,
     categoryTypeDefs,
     unitTypeDefs,
+    accountingTypeDefs,
   ]),
   resolvers: mergeResolvers([
     stockResolvers,
@@ -28,5 +30,6 @@ module.exports = {
     authResolvers,
     categoryResolvers,
     unitResolvers,
+    accountingResolvers,
   ]),
 };

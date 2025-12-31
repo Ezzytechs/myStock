@@ -11,7 +11,7 @@ module.exports = gql`
     name: String
   }
 
-  type Stock {
+  type AccountingStock {
     id: ID!
     category: Category
     unit: String!
@@ -23,7 +23,7 @@ module.exports = gql`
 
   type Accounting {
     id: ID!
-    stock: Stock!
+    stock: AccountingStock!
     amountBeforeExpense: Float!
     amountAfterExpense: Float!
     leastSale: Float!
@@ -34,7 +34,7 @@ module.exports = gql`
     updatedAt: String!
   }
 
-  type StockStatistics {
+  type AccountingStockStatistics {
     open: Int
     closed: Int
     total: Int
@@ -88,7 +88,7 @@ module.exports = gql`
     owner: ID
     stock: ID
     remark: String
-    dateSold: Date
+    dateSold: String
   }
 
   input AccountingInput {
@@ -105,7 +105,7 @@ module.exports = gql`
     stock: ID!
     amountBeforeExpense: Float
     amountAfterExpense: Float
-    dateSold: Date
+    dateSold: String
     leastSale: Float
     netChange: Float
     remark: String

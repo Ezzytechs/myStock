@@ -33,7 +33,7 @@ module.exports = {
           : { ...args, owner: (args.owner = user.sub) };
       return getAccountingStatsByFilter(filter);
     },
-    getAccountingStats: (_parent, args, { user }) => {
+    accountingStats: (_parent, args, { user }) => {
       const filter =
         user.role === "admin"
           ? { ...args }
