@@ -1,18 +1,76 @@
-# MYSTOCK API
+# 📦 MYSTOCK API
 
-A robust GraphQL-based stock management system built with Node.js, Express, and MongoDB. This application provides comprehensive tools for managing products, categories, units, and financial accounting.
+### Stock Management & Accounting Backend
 
-## 🚀 Features
+MYSTOCK API is a scalable and secure backend system for managing inventory, accounting, and financial operations within a business environment. It provides real-time stock tracking, automated accounting records, historical analytics, and decision-support insights to help businesses make informed decisions.
 
-- **User Authentication**: Secure register, login, logout, OTP-based password reset, and role management.
-- **Stock Management**: CRUD operations for stock items with pagination, filtering (by category, unit, status, year), and detailed statistics.
-- **Category & Unit Management**: Organize stocks efficiently with customizable categories and units.
-- **Accounting & Finances**: Track profit/loss, net changes, and generate yearly financial breakdowns.
-- **Security**: Implemented rate limiting, Helmet for security headers, CORS configuration, and JWT authentication.
+---
+
+## 🚀 Overview
+
+The system handles sales, purchases, inventory adjustments, shortages, and gains while automatically generating historical records and analytical summaries. Built with scalability and data integrity in mind, it supports both operational management and financial oversight.
+
+---
+
+## ✨ Key Features
+
+### 📊 Inventory Management
+
+- Real-time stock level tracking
+- Monitoring shortages, gains, and adjustments
+- Accurate product, category, unit, and warehouse records
+
+### 💰 Accounting & Financial Tracking
+
+- Sales and purchase transaction recording
+- Automatic cost, profit, and loss calculations
+- Financial consistency across all operations
+
+### 🕒 Historical Data & Analytics
+
+- Time-based sales and purchase reports
+- Inventory trend and performance analysis
+- Complete stock movement history
+
+### 🧠 Decision Advisory System
+
+- Identification of inventory risks (shortage / overstock)
+- Data-driven purchasing and sales support
+- Insights based on historical and current data
+
+### 🔐 Secure & Scalable API
+
+- JWT authentication and authorization
+- Optimized performance and scalability
+- Designed for web and mobile integration
+
+---
 
 ## 🛠️ Tech Stack
 
 - **Backend**: Node.js, Express.js
+- **API**: GraphQL (Apollo Server)
+- **Database**: MongoDB (Mongoose)
+- **Security**:
+  - JWT
+  - bcryptjs
+  - Helmet
+  - Express Rate Limit
+- **Utilities**:
+  - morgan
+  - compression
+  - cookie-parser
+  - module-alias
+
+---
+
+## 📁 Project Structure
+
+````text
+myStock/
+├── src/
+│   ├── config/          # Configuration files (DB, security, rate limit)
+│   ├── graphql/         # GraphQL schemas and resolvers
 - **API**: GraphQL (Apollo Server)
 - **Database**: MongoDB (Mongoose)
 - **Security**: JWT, bcryptjs, Helmet, Express-Rate-Limit
@@ -34,7 +92,7 @@ myStock/
 ├── app.js               # Express application setup
 ├── index.js             # Entry point and server startup
 └── .env                 # Environment variables
-```
+````
 
 ## ⚙️ Getting Started
 
