@@ -29,10 +29,17 @@ module.exports = gql`
     users: Int
     admins: Int
   }
+  input AddressInput {
+    country: String
+    state: String
+  }
+
   input RegisterInput {
     username: String!
     email: String!
     password: String!
+    phone: String
+    address: AddressInput
   }
 
   input UpdateInput {
